@@ -1,0 +1,1545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ArcherStudio | Final Goodbye!</title>
+    <link rel="icon" href="https://i.ibb.co/ymz2k7P7/app-logo.png" type="image/png" />
+    <link rel="stylesheet" href="style.css" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            position: relative;
+            background: black;
+            text-align: center;
+            padding: 0px 35px;
+        }
+        .gradient-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            border: none;
+        }
+        .bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.ibb.co/8L6ZddCz/Untitled-design.png') no-repeat center top;
+            background-size: cover;
+            filter: grayscale(80%) blur(2px);
+            z-index: -1;
+        }
+        .header {
+            width: 100%;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .header img {
+            max-width: 100%;
+            height: auto;
+        }
+        footer {
+            width: 100%;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+            bottom: 30px;
+            position: fixed;
+            z-index: 100;
+            opacity: .3;
+        }
+        span {
+            font-size: 11px;
+            font-weight: normal;
+            color: #a5a5a5;
+        }
+        form {
+            top: -20px;
+            position: relative;
+            z-index: 3;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideToMiddle {
+            from {
+                transform: translateY(0);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(50px);
+                opacity: 1;
+            }
+        }
+
+        .fade-out {
+            animation: fadeOut 0.5s forwards;
+            pointer-events: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .slide-to-middle {
+            animation: slideToMiddle 0.8s ease-out forwards;
+        }
+
+        /* Fade-in subtitle animation */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .subtitle {
+            font-size: 18px;
+            color: white;
+            opacity: 0;
+            display: none;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+            margin-top: 10px;
+        }
+
+        .subtitle.show {
+            display: block;
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            width: 100%;
+        }
+        input {
+            width: 100%;
+            padding: 12px 15px;
+            padding-right: 50px;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            outline: none;
+            background: #e0e0e0;
+            color: #333;
+            transition: all 0.3s ease;
+            text-transform: capitalize;
+        }
+        input:focus {
+            border: 2px solid #777;
+            background: #d6d6d6;
+        }
+        .form-btn {
+            position: absolute;
+            display: flex;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            border: none;
+            color: #333;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-btn:hover {
+            background: #333;
+            color: white;
+        }
+        svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Stage */
+        .stage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+        }
+        .curtain {
+            position: absolute;
+            top: 0;
+            width: 50%;
+            height: 100%;
+            background: url('https://i.pinimg.com/originals/67/03/1c/67031c23c4c06d8a58b4d75e61cba78a.jpg');
+            background-size: cover;
+            background-position: center;
+            transition: transform 1.5s ease-in-out;
+        }
+
+        .curtain.left {
+            left: 0;
+            border-right: 5px solid black;
+        }
+        .curtain.right {
+            right: 0;
+            background-position: right;
+            border-left: 5px solid black;
+        }
+
+        /* Animation: Open Curtains */
+        .stage.open .curtain.left {
+            transform: translateX(-100%);
+        }
+
+        .stage.open .curtain.right {
+            transform: translateX(100%);
+        }
+
+        /* 2nd stage */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            color: white;
+            transition: opacity 0.5s ease;
+            z-index: 2;
+            padding: 10px 20px;
+            align-items: center;
+            flex-direction: column;
+        }
+        .page {
+            display: flex;
+            max-width: 600px;
+            width: 100%;
+            padding: 20px;
+            /* background: rgba(255, 255, 255, 0.1); */
+            border-radius: 10px;
+            text-align: center;
+            height: 80vh;
+            position: relative;
+            top: 50px;
+            flex-direction: column;
+            justify-content: center;
+            overflow-y: auto;
+            align-items: center;
+            transition: all 0.5s ease;
+            overflow-x: hidden;
+        }
+        .auto {
+            animation: autoNext 7s linear forwards;
+        }
+
+        .button-overlays {
+            margin-top: 20px;
+            padding: 10px 30px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            border: 1px solid #ffffffb0;
+            border-radius: 20px;
+            transition: all 0.3s ease-in-out;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-overlays:hover {
+            background: #161616;
+            transform: translateY(-2px);
+            box-shadow: 0px 6px 14px rgba(0, 0, 0, 0.3);
+        }
+
+        .disabled {
+            background: #161616;
+            cursor: not-allowed;
+        }
+
+        .button-overlays:active {
+            transform: scale(0.95);
+        }
+
+        .actions {
+            width: 100%;
+            top: 0;
+            position: fixed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            /* max-width: 400px; */
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .mute-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .mute-btn i {
+            transition: color 0.3s ease;
+        }
+
+        .mute-btn:hover i {
+            color: #ddd;
+        }
+
+        .avatar{
+            width: 60px;
+            margin-bottom: 25px;
+        }
+
+        .big-text{
+            margin-bottom: 5px;
+            text-transform: capitalize;
+        }
+
+        .par-text{
+            font-size: small;
+            color: #e5e5e5;
+            opacity: 0;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+        }
+
+        .Letters {
+            text-align: left;
+            display: flex;
+            align-items: flex-start;
+            white-space: pre-line;
+            word-break: keep-all;
+            overflow-wrap: break-word;
+            border: none;
+            justify-content: flex-start;
+        }
+
+        .actions-btn-pages {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            width: -webkit-fill-available;
+        }
+
+        iframe {
+            width: -webkit-fill-available;
+            opacity: 0;
+            margin-top: 20px;
+            border: none;
+        }
+
+        .group-members {
+            list-style-type: disc;
+            padding-left: 20px;
+            font-size: small;
+            color: #e5e5e5;
+        }
+
+        .group-photo {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+            margin: 30px 0px;
+            width: -webkit-fill-available;
+        }
+
+        .group-photo img {
+            width: 100%;
+            max-width: 500px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .features{
+            width: 150px;
+            border-radius: 5px;
+                        margin-bottom: 25px;
+        }
+        /* Right to Center */
+        @keyframes rightToCenter {
+            from { transform: translateX(150%); opacity: 1; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Center to Left */
+        @keyframes centerToLeft {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-150%); opacity: 0; }
+        }
+
+        /* Slidnme Up and Maintain Full Opacity */
+        @keyframes slideUpOpacity {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Slide Left and Fade Out */
+        @keyframes slideLeftFadeOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(-20px); opacity: 0; }
+        }
+
+        /* Fade In */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Fade Out */
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+
+        /* Slide From Top While Fading In */
+        @keyframes slideFromTopFadeIn {
+            from { transform: translateY(-30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Slide Down While Fading Out */
+        @keyframes slideDownFadeOut {
+            from { transform: translateY(0); opacity: 1; }
+            to { transform: translateY(30px); opacity: 0; }
+        }
+
+        /* Assign Animation Classes */
+        .rightToCenter {
+            animation: rightToCenter 1.5s ease-in-out forwards;
+        }
+
+        .centerToLeft {
+            animation: centerToLeft 1.5s ease-in-out forwards;
+        }
+
+        .slideUpOpacity {
+            animation: slideUpOpacity 1s ease-in-out forwards;
+        }
+
+        .slideLeftFadeOut {
+            animation: slideLeftFadeOut 1s ease-in-out forwards;
+        }
+
+        .fadeIn {
+            animation: fadeIn 1.5s ease-in-out forwards;
+        }
+
+        .fadeOut {
+            animation: fadeOut 1.5s ease-in-out forwards;
+        }
+
+        .slideFromTopFadeIn {
+            animation: slideFromTopFadeIn 1.5s ease-in-out forwards;
+        }
+
+        .slideDownFadeOut {
+            animation: slideDownFadeOut 1.5s ease-in-out forwards;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="bg"></div>
+    <div class="gradient-overlay"></div>
+
+    <div class="stage open" id="stage">
+    <div class="curtain left"></div>
+    <div class="curtain right"></div>
+    </div>
+
+    <!-- First Step -->
+    <form id="graduationForm">
+        <div class="header">
+            <img src="https://see.fontimg.com/api/rf5/r78L/MWM0NzE3NjZhNTFiNDQ1Y2I1M2FhODI3MTliMDVkNGYudHRm/Q2xhc3Mgb2YgMjAyNQ/chalktastic.png?r=fs&h=65&w=1000&fg=FFFFFF&bg=353D4B&tb=1&s=65" alt="Class of 2025">
+            <div class="subtitle" id="subtitle">12-Tolentino</div>
+        </div>
+        <div class="input-container" id="name-input-container">
+            <input type="text" id="lastNameInput" placeholder="Enter Last Name"autocomplete="off" required>
+            <button class="form-btn" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5l6 6m0 0l-6 6m6-6H4.5" />
+                </svg>
+            </button>
+        </div>
+    </form>
+
+    <!-- Second Step -->
+    <div class="overlay" id="overlay">
+        <div class="actions">
+            <img src="https://i.ibb.co/ymz2k7P7/app-logo.png" alt="Logo" class="logo">
+            <button class="mute-btn" onclick="toggleMute()">
+                <i class="ri-volume-up-fill"></i>
+            </button>
+        </div>
+
+        <div class="page auto" id="page1">
+            <h2 class="big-text" id="h2n1">Welcome to ArcherStudio</h2>
+            <p class="par-text" id="pn1">Project Memories 1.0</p>
+        </div>
+
+        <div class="page hidden" id="page2">
+            <img id="avatar" class="avatar" alt="avatar" />
+            <h2 class="big-text" id="h2n2">Hi</h2>
+            <p class="par-text" id="pn2">Your journey isn’t over yet, but let’s take one last look back.</p>
+        </div>
+
+
+        <div class="page hidden" id="page3">
+            <h2 class="big-text" id="h2n3">Letters for you ❤</h2>
+            <p class="par-text" id="pn3">
+                Click the button to open a special message in a bottle just for you!
+            </p>
+
+            <button class="button-overlays" id="unlock" onclick="nextPage(3)"><i class="ri-lock-fill"></i></button>
+        </div>
+
+        <div class="page hidden Letters" id="page4">
+            <h2 class="big-text" id="h2n4">Dear Tolentino,</h2>
+            <p class="par-text" id="pn4">
+                <b>OK, CLASS—BEFORE WE START, ito ang RULES::</b>
+
+                NO.1. I want you to show your BEST right away, and don’t expect to get a high score easily.
+                NO.2. When I enter the room, I want all the chairs aligned, and you should already be standing.
+
+                I just remembered saying this to you while observing how you were arranged on our first day together. What stood out to me the most was your activeness in class and attentiveness during lessons. That truly amazed me—even though some of you would doze off and had to be called out, even though some had their own stories and wandered around, you still listened and corrected yourselves when needed.
+
+                We may not have gotten to know each other deeply, and my mind may not have memorized every detail about you, but you have still been part of my journey. And I know, in your own way, I have been part of yours too.
+            </p>
+            <div class="actions-btn-pages">
+                <button class="button-overlays disabled" id="prev1"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next1" onclick="nextPage(4)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden Letters" id="page5">
+            <h2 class="big-text" id="h2n5">ALWAYS REMEMBER:</h2>
+            <p class="par-text" id="pn5">
+                As you step onto a new path, continue to embrace corrections, because learning never ends.
+
+                Always be humble. It’s okay if you’re not the best at everything—as long as you have character. Skills and intelligence may open doors, but kindness and goodness toward others will help you stay and thrive in your chosen field.
+
+                Padayon, ICT—I am PROUD of you.
+
+                OK, CLASS—BEFORE WE END, here are the <b> NEW RULES</b>:
+
+                NO.1. You are already the BEST, but strive to be even more humble so that you may rise even higher.
+                NO.2. Always put GOD first. No matter which door you walk through, always and always glorify GOD.
+
+                <b>Your Adviser,</b>
+                Sir JP
+            </p>
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev2" onclick="prevPage(5)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next2" onclick="nextPage(5)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden" id="page6">
+            <h2 class="big-text" id="h2n6">Wait, There's More?!</h2>
+            <p class="par-text" id="pn6">
+                This is from your Class Representative.
+            </p>
+        </div>
+
+        <div class="page hidden Letters" id="page7">
+            <h2 class="big-text" id="h2n7">Dear, </h2>
+            <p class="par-text" id="pn7">
+                Congratulations, Graduate! We made it through SHS!
+
+                But before our school year officially ends, I want to leave you with a few gentle reminders that may help you in the future.
+
+                First, don’t give too much, nor too little—just enough. Love, time, and effort should be balanced. Don’t pour everything into something or someone until there’s nothing left for yourself. Never starve yourself emotionally, mentally, or physically for someone who wouldn’t do the same for you. Prioritize yourself. And above all, have faith in God. He loves you deeply and is always willing to do everything for you.
+
+                Second, don’t be afraid to take risks. Looking back, I have so many regrets—not because I failed, but because I never tried (DLSU, ADMU). I don’t want you to feel the same way. No matter what happens, at the end of the day, it’s still just another sunset. So take that risk—whether in love, career, or any path you choose. Growth comes from the moments you dare to step forward.
+            </p>
+            <div class="actions-btn-pages">
+                <button class="button-overlays disabled" id="prev3"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next3" onclick="nextPage(7)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden Letters" id="page8">
+            <h2 class="big-text" id="h2n8">Love yourself!</h2>
+            <p class="par-text" id="pn8">
+                Nak, kita mo ‘yang nasa taas? Isabuhay mo ‘yan, ha!
+
+                Always take care of yourself. God will distance you from harm, even the ones you don’t see coming. Trust in His plans because He knows what’s best for you.
+
+                This may not be the last time we see each other, but take care of yourself—especially from the negativity around you. Protect that child inside you. Don’t let the world harden you or take away the kindness, dreams, and joy that shaped who you are today.
+
+                My Tolentino babies, may God bless every step you take and guide you toward the right path.
+
+                I’m so proud of you—because you made it! And you will keep making it!
+
+                Tandaan: ang goal ay maging Rich Tita/Tito! 💰😆
+
+                PADAYON, Tolentino!
+
+                With love,
+                Your Former Class Representative,
+                Mark Espora
+            </p>
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev4" onclick="prevPage(8)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next4" onclick="nextPage(8)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden" id="page9">
+            <h2 class="big-text" id="h2n9">Time for a RECAP!</h2>
+            <p class="par-text" id="pn9">
+                Different groups, but same timeline.
+            </p>
+        </div>
+
+        <!-- Group 1 -->
+        <div class="page hidden Letters" id="page10">
+            <h2 class="big-text" id="h2n10">Introducing Group 1</h2>
+            <iframe id="video1" 
+                width="360"
+                height="640"
+                src="https://www.youtube.com/embed/kgFCQ_JFRYM?autoplay=1&mute=1&loop=1&playlist=kgFCQ_JFRYM&controls=0&modestbranding=0&showinfo=0&rel=0"
+                title="YouTube video player"
+                frameborder="0"
+                allow="autoplay;"
+                allowfullscreen>
+            </iframe>
+            <div class="actions-btn-pages">
+                <button class="button-overlays disabled" id="prev5"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next5" onclick="nextPage(10)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden Letters" id="page11">
+            <h2 class="big-text" id="h2n11">Members of Group 1</h2>
+             <p class="par-text" id="pn11">
+                We are Group 1 from 12-Tolentino, S.Y. 2025—a team known for our creativity and love for making every moment count. Despite our habit of cramming, we always manage to land on our feet, turning challenges into successes with determination and teamwork.
+            </p>
+            <div class="group-photo" id="classphoto11">
+                <img src="https://i.ibb.co/HphqnY2K/IMG-20250319-112549-647.jpg" alt="Group 1 - 12 Tolentino">
+            </div>
+
+            <h3 id="h3n1">Group Members:</h3>
+            <ul id="ul1" class="group-members">
+                <li>Mark Espora (Mastermind)</li>
+                <li>Rhenamariss Bobier (Mutya ng grupo)</li>
+                <li>Justine Dablo (Gamer Boy)</li>
+                <li>Justin Dulay (Queen Fyang)</li>
+                <li>Romel Guarino (Coquette ng Grupo)</li>
+                <li>Rich Gullon (Backburner)</li>
+                <li>Nikko Nagai (Artist ng Group)</li>
+                <li>Rhon Nudalo (Heart Thob)</li>
+            </ul>
+
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev6" onclick="prevPage(11)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next6" onclick="nextPage(11)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <!-- Group 2 -->
+            <div class="page hidden Letters" id="page12">
+            <h2 class="big-text" id="h2n12">Introducing Group 2</h2>
+            <iframe id="video2" allow="fullscreen;autoplay" allowfullscreen height="100%" src="https://streamable.com/e/t9za1b?autoplay=1&muted=1&nocontrols=1" width="360" height="640"></iframe>
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev7" onclick="prevPage(12)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next7" onclick="nextPage(12)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden Letters" id="page13">
+            <h2 class="big-text" id="h2n13">Members of Group 2</h2>
+             <p class="par-text" id="pn13">
+                We are Group 2, ICT Tolentino from batch Champion [S.Y2025]. A team that are formed to create excellent Learning Activities and provide honor to our lord and savior, Jesus Christ. Stubborn but Incredible, a group that often shows mess but undeniably the best.
+            </p>
+            <div class="group-photo" id="classphoto13">
+                <img src="https://i.ibb.co/rKDGBSY0/4ba22ddb-7fbb-41ca-8d8d-3aa376a9c795.jpg" alt="Group 2 - 12 Tolentino">
+            </div>
+
+            <h3 id="h3n2">Group Members:</h3>
+            <ul id="ul2" class="group-members">
+                <li>Jasper Esperanzate (Leader of Group 2)</li>
+                <li>Alyssa Boyon (Secretary ng Group 2)</li>
+                <li>Divine Carreon (Kontra-bida ng Group 2)</li>
+                <li>Jiechelle Condesa (Multo ng Group 2)</li>
+                <li>Jonas Cordero (Wala lang)</li>
+                <li>Sidharta Cruz (Seed the great)</li>
+                <li>John Mendoza (Undefeated yapper)</li>
+                <li>Gilbert Pepito (Sleep prince of Group 2)</li>
+            </ul>
+
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev8" onclick="prevPage(13)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next8" onclick="nextPage(13)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <!-- Group 6 -->
+        <div class="page hidden Letters" id="page14">
+            <h2 class="big-text" id="h2n14">Introducing Group 6</h2>
+            <iframe id="video3" allow="fullscreen;autoplay" allowfullscreen height="100%" src="https://streamable.com/e/lfu7w4?autoplay=1&muted=1&nocontrols=1" width="360" height="640"></iframe>
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev9" onclick="prevPage(14)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next9" onclick="nextPage(14)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden Letters" id="page15">
+            <h2 class="big-text" id="h2n15">Members of Group 6</h2>
+             <p class="par-text" id="pn15">
+                Our group goes beyond just schoolwork; having been together since Grade 11, we have built a strong bond that turned into a friendship and created wonderful memories. Despite the challenges, we've always supported and goofed around with each other, but always priotizing teamwork in every decision and project we take on.
+            </p>
+            <div class="group-photo" id="classphoto15">
+                <img src="https://i.ibb.co/kgP4L1NY/486705065-1243244723983618-2589577394728270697-n.jpg" alt="Group 7 - 12 Tolentino">
+            </div>
+
+            <h3 id="h3n3">Group Members:</h3>
+            <ul id="ul3" class="group-members">
+                <li>Ramos, Gabrielle (The Leader)</li>
+                <li>Clutario, Roselynn (Makulit pero Masipag)</li>
+                <li>Coladilla, Adrielle (The Artist and Sub Leader)</li>
+                <li>Mendoza, Zidon (Helper na Crammer)</li>
+                <li>Naallatan, Gian (Helper na Crammer 2.0)</li>
+                <li>Ortiz, Jeshua (Tahimik pero Masipag)</li>
+                <li>San Pedro, Daimler (Spokesperson)</li>
+                <li>Ting, Elijah (Makulit pero Masipag 2.0)</li>
+            </ul>
+
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev10" onclick="prevPage(15)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next10" onclick="nextPage(15)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <!-- Group 7 -->
+        <div class="page hidden Letters" id="page16">
+            <h2 class="big-text" id="h2n16">Introducing Group 7</h2>
+                <iframe id="video4" allow="fullscreen;autoplay" allowfullscreen height="100%" src="https://streamable.com/e/x9qncc?autoplay=1&muted=1&nocontrols=1" width="360" height="640"></iframe>
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev11" onclick="prevPage(16)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next11" onclick="nextPage(16)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden Letters" id="page17">
+            <h2 class="big-text" id="h2n17">Members of Group 7</h2>
+             <p class="par-text" id="pn17">
+                The seventh group isn’t too serious but not exactly a comedy show either—we’re just vibing somewhere in the middle. It’s a fine line between being memorable and “wait, what did they even do again?” but hey, at least we’re walking it.
+            </p>
+            <div class="group-photo" id="classphoto17">
+                <img src="https://i.ibb.co/mFcHf54w/c418af01-24dc-4ab2-ad22-70c149f95d6d.jpg" alt="Group 7 - 12 Tolentino">
+            </div>
+
+            <h3 id="h3n4">Group Members:</h3>
+            <ul id="ul4" class="group-members">
+                <li>Jasper Trinidad (Leader)</li>
+                <li>Alexa Gelua </li>
+                <li>Carl Ultraa </li>
+                <li>Ian Howard </li>
+                <li>James Paul Rocillo </li>
+                <li>Jessa Jantoc </li>
+                <li>Novhy Kyrie Bermudo </li>
+                <li>Thea Sophia Hernandez</li>
+            </ul>
+
+            <div class="actions-btn-pages">
+                <button class="button-overlays" id="prev12" onclick="prevPage(17)"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next12" onclick="nextPage(17)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden" id="page18">
+            <h2 class="big-text" id="h2n18">OK NA'TO!</h2>
+            <p class="par-text" id="pn18">
+                Awarding of the Best of the Best!
+            </p>
+        </div>
+
+        <div class="page hidden" id="page19">
+            <h2 class="big-text" id="h2n19">The Face of the Year Award</h2>
+            <p class="par-text" id="pn19">
+                Sobrang Latina!
+            </p>
+        </div>
+
+        <div class="page hidden" id="page20">
+            <img id="feature1" src="https://i.ibb.co/PG7KhrD0/IMG-20250406-033635-343.jpg" class="features" alt="avatar" />
+            <h2 class="big-text" id="h2n20">Alexa Gelua</h2>
+            <p class="par-text" id="pn20">
+                10 votes from majority
+            </p>
+        </div>
+
+        <div class="page hidden" id="page21">
+            <h2 class="big-text" id="h2n21">The Comedian of the Year Award</h2>
+            <p class="par-text" id="pn21">
+                Laging may baon na joke, ah!
+            </p>
+        </div>
+
+        <div class="page hidden" id="page22">
+            <img id="feature2" src="https://i.ibb.co/HTjHdbZz/IMG-20250406-034049.jpg" class="features" alt="avatar" />
+            <h2 class="big-text" id="h2n22">Rich Gullon</h2>
+            <p class="par-text" id="pn22">
+                10 votes from majority
+            </p>
+        </div>
+
+        <div class="page hidden" id="page23">
+            <h2 class="big-text" id="h2n23">The Fashion Icon of the Year Award</h2>
+            <p class="par-text" id="pn23">
+                Always serving looks, ATE! 💅✨
+            </p>
+        </div>
+
+        <div class="page hidden" id="page24">
+            <img id="feature3" src="https://i.ibb.co/fdWMYQRZ/IMG-20250406-034104.jpg" class="features" alt="avatar" />
+            <h2 class="big-text" id="h2n24">Romel Guarino</h2>
+            <p class="par-text" id="pn24">
+                8 votes from majority
+            </p>
+        </div>
+
+        <div class="page hidden" id="page25">
+            <h2 class="big-text" id="h2n25">The Loudspeakers of the Year Award</h2>
+            <p class="par-text" id="pn25">
+                Always pinapalipat ng upuan... HAHAHAHHAH
+            </p>
+        </div>
+
+        <div class="page hidden" id="page26">
+            <img id="feature4" src="https://i.ibb.co/TxR8V3k3/IMG-20250406-032157-598.jpg" class="features" alt="avatar" />
+            <h2 class="big-text" id="h2n26">Gelua & Guarino</h2>
+            <p class="par-text" id="pn26">
+                The partners in crime
+            </p>
+        </div>
+
+        <div class="page hidden" id="page27">
+            <h2 class="big-text" id="h2n27">The Love Team of the Year Award</h2>
+            <p class="par-text" id="pn27">
+                Ahhhh, Dzaddy!
+            </p>
+        </div>
+
+        <div class="page hidden" id="page28">
+            <img id="feature5" src="https://i.ibb.co/W4sn4mXh/IMG-20250406-034035.jpg" class="features" alt="avatar" />
+            <h2 class="big-text" id="h2n28">"Themes"</h2>
+            <p class="par-text" id="pn28">
+                "Beauty and the beast" ahhhh!
+            </p>
+        </div>
+
+
+
+
+
+
+
+
+</div>
+    
+
+    <footer>ArcherStudio © 2025 <br><span>Created by: Mark Espora<span></footer>
+<script>
+
+    // on-submit
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.getElementById("graduationForm");
+        const submitButton = form.querySelector("button");
+
+        form.addEventListener("submit", function (event) {
+            event.preventDefault();
+
+            // playYouTubeVideoWithSound("6lh-VHYaveM");
+
+            let lastName = document.getElementById("lastNameInput").value.trim();
+            if (lastName) {
+                submitButton.disabled = true;
+                setupStage(lastName);
+            } else {
+                alert("Please enter your last name.");
+            }
+        });
+    });
+
+    // curtain animation
+
+    function setupStage(lastName) {
+        const stage = document.getElementById("stage");
+        const nameInputContainer = document.getElementById("name-input-container");
+        const header = document.querySelector(".header");
+        const subtitle = document.getElementById("subtitle");
+        const avatar = document.getElementById("avatar");
+        const name = document.getElementById("h2n2");
+        const greetings = document.getElementById("h2n7");
+
+        // avatar.src = "https://api.dicebear.com/9.x/pixel-art/svg?seed=" + lastName;
+        name.textContent = "Hi " + lastName;
+        greetings.textContent = "Dear, " + lastName;
+
+        
+
+        stage.classList.toggle("open");
+        nameInputContainer.classList.add("fade-out");
+
+        setTimeout(() => {
+            nameInputContainer.classList.add("hidden");
+            header.classList.add("slide-to-middle");
+            subtitle.classList.add("show");
+        }, 500);
+
+        setTimeout(() => {
+            showOverlay(); 
+        }, 3000);
+
+        setTimeout(() => {
+            fadeOutForm();
+        }, 3000);
+    }
+
+    function fadeOutForm() {
+        const form = document.getElementById("graduationForm");
+        form.classList.add("fade-out");
+
+        setTimeout(() => {
+            form.style.display = "none";
+        }, 500);
+    }
+
+    let youtubeIframes = [];
+    let currentVideo = null;
+    let isMuted = false;
+
+    const videoIds = [
+        '78mCWHJF4JU', //akap
+        '6lh-VHYaveM', //bluesky
+        'ekd46d6AYEQ', //huling sayaw
+        'pCyLYqCuQ_M', //burnout
+        'JQbjS0_ZfJ0', //all the stars
+        'lAqUrQzHUcU',  //hero
+        'E5RCG8aLkIc' //backburner
+    ];
+
+    // Preload YouTube videos
+    function preloadYouTubeVideos() {
+        for (let i = 0; i < videoIds.length; i++) {
+            let iframe = document.createElement("iframe");
+            iframe.id = `youtube-video-${i+1}`;
+            iframe.width = "1";
+            iframe.height = "1";
+            iframe.style.position = "absolute";
+            iframe.style.left = "-9999px";
+            iframe.style.display = "none";
+            iframe.allow = "autoplay";
+            iframe.src = `https://www.youtube.com/embed/${videoIds[i]}?autoplay=0&mute=1&loop=1&playlist=${videoIds[i]}&enablejsapi=1`;
+
+            document.body.appendChild(iframe);
+            youtubeIframes.push(iframe);
+        }
+    }
+
+    function playYouTubeVideo(videoId) {
+        if (currentVideo !== null) {
+            pauseVideo(currentVideo);
+        }
+
+        // Find the iframe for the given videoId
+        let iframe = youtubeIframes[videoId - 1];
+        if (iframe) {
+            iframe.style.display = "block";
+            iframe.src = `https://www.youtube.com/embed/${videoIds[videoId - 1]}?autoplay=1&mute=${isMuted ? 1 : 0}&loop=1&playlist=${videoIds[videoId - 1]}&enablejsapi=1`;
+            currentVideo = iframe;
+        }
+    }
+
+    // Pause the currently playing video
+    function pauseVideo(iframe) {
+        try {
+            iframe.contentWindow.postMessage(
+                '{"event":"command","func":"pauseVideo","args":[]}',
+                "*"
+            );
+        } catch (e) {
+            console.error("Error pausing video:", e);
+        }
+    }
+
+    // Toggle mute state
+    function toggleMute() {
+        if (!currentVideo) return;
+
+        isMuted = !isMuted;
+        currentVideo.contentWindow.postMessage(
+            `{"event":"command","func":"${isMuted ? "mute" : "unMute"}","args":[]}`,
+            "*"
+        );
+
+        const btnIcon = document.querySelector(".mute-btn i");
+        btnIcon.classList.toggle("ri-volume-up-fill", !isMuted);
+        btnIcon.classList.toggle("ri-volume-mute-fill", isMuted);
+    }
+
+    window.onload = () => {
+        preloadYouTubeVideos();
+    };
+
+    // second part
+
+    function applyAnimation(elementId, animationClass) {
+        let element = document.getElementById(elementId);
+        if (element) {
+            element.classList.add(animationClass);
+            setTimeout(() => {
+                element.classList.remove(animationClass);
+            }, 5000);
+        }
+    }
+
+    let currentPage = 0;
+
+    function showOverlay() {
+        document.getElementById('overlay').style.display = 'flex';
+        setTimeout(() => {
+            document.getElementById("stage").classList.toggle("open");
+            nextPage(currentPage);
+        }, 1000);
+
+        setTimeout(() => {
+            document.getElementById("stage").style.display = "none";
+
+        }, 5000);
+    }
+
+    function nextPage(page) {
+        let current = document.getElementById(`page${page}`);
+        let next = document.getElementById(`page${page + 1}`);
+
+        if (current) {
+            current.classList.add('hidden');
+        }
+        if (next) {
+            next.classList.remove('hidden');
+            currentPage = page + 1;
+            runSlide(currentPage);
+        }
+    }
+
+    function prevPage(page) {
+        let current = document.getElementById(`page${page}`);
+        let prev = document.getElementById(`page${page - 1}`);
+
+        if (current) {
+            current.classList.add('hidden');
+        }
+        if (prev) {
+            prev.classList.remove('hidden');
+            currentPage = page - 1;
+            runSlide(currentPage);
+        }
+    }
+
+    function runSlide(page) {
+        switch (page) {
+            case 1:
+                slide1();
+                playYouTubeVideo(1);
+                break;
+            case 2:
+                slide2();
+                break;
+            case 3:
+                slide3();
+                break;
+            case 4:
+                slide4();
+                playYouTubeVideo(6);
+                break;
+            case 5:
+                slide5();
+                break;
+            case 6:
+                slide6();
+                playYouTubeVideo(7);
+                break;
+            case 7:
+                slide7();
+                break;
+            case 8:
+                slide8();
+                break;
+            case 9:
+                slide9();
+                playYouTubeVideo(3);
+                break;
+            case 10:
+                slide10();
+                break;
+            case 11:
+                slide11();
+                break;
+            case 12:
+                slide12();
+                break;
+            case 13:
+                slide13();
+                break;
+            case 14:
+                slide14();
+                break;
+            case 15:
+                slide15();
+                break;
+            case 16:
+                slide16();
+                break;
+            case 17:
+                slide17();
+                break;
+            case 18:
+                slide18();
+                playYouTubeVideo(6);
+                break;
+            case 19:
+                slide19();
+                break;
+            case 20:
+                slide20();
+                break;
+            case 21:
+                slide21();
+                break;
+            case 22:
+                slide22();
+                break;
+            case 23:
+                slide23();
+                break;
+            case 24:
+                slide24();
+                break;
+            case 25:
+                slide25();
+                break;
+            case 26:
+                slide26();
+                break;
+            case 27:
+                slide27();
+                break;
+            case 28:
+                slide28();
+                break;
+
+        }
+    }
+
+    // Slide animations
+    function slide1() {
+        applyAnimation("h2n1", "rightToCenter");
+        setTimeout(() => applyAnimation("pn1", "slideUpOpacity"), 2000);
+        setTimeout(() => applyAnimation("page1", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(1), 7000);
+    }
+
+    function slide2() {
+        applyAnimation("h2n2", "rightToCenter");
+        applyAnimation("avatar", "slideFromTopFadeIn");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn2");
+            pElement.style.opacity = "1";
+            applyAnimation("pn2", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page2", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(2), 7000);
+    }
+
+    function slide3() {
+        applyAnimation("h2n3", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("pn3");
+            pElement.style.opacity = "1";
+            applyAnimation("pn3", "slideFromTopFadeIn");
+
+        applyAnimation("unlock", "slideFromTopFadeIn");
+    }
+
+    function slide4() {
+        applyAnimation("h2n4", "slideFromTopFadeIn");
+            let pElement = document.getElementById("pn4");
+            pElement.style.opacity = "1";
+            applyAnimation("pn4", "slideFromTopFadeIn");
+
+        applyAnimation("prev1", "slideFromTopFadeIn");
+        applyAnimation("next1", "slideFromTopFadeIn");
+    }
+
+    function slide5() {
+        applyAnimation("h2n5", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("pn5");
+            pElement.style.opacity = "1";
+            applyAnimation("pn5", "slideFromTopFadeIn");
+
+        applyAnimation("next2", "slideFromTopFadeIn");
+        applyAnimation("prev2", "slideFromTopFadeIn");
+    }
+
+    function slide6() {
+        applyAnimation("h2n6", "rightToCenter");
+        setTimeout(() => applyAnimation("pn6", "slideUpOpacity"), 2000);
+        setTimeout(() => applyAnimation("page6", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(6), 7000);
+    }
+
+    function slide7() {
+        applyAnimation("h2n7", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("pn7");
+            pElement.style.opacity = "1";
+            applyAnimation("pn7", "slideFromTopFadeIn");
+
+        applyAnimation("next3", "slideFromTopFadeIn");
+        applyAnimation("prev3", "slideFromTopFadeIn");
+    }
+
+    function slide8() {
+        applyAnimation("h2n8", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("pn8");
+            pElement.style.opacity = "1";
+            applyAnimation("pn8", "slideFromTopFadeIn");
+
+        applyAnimation("next4", "slideFromTopFadeIn");
+        applyAnimation("prev4", "slideFromTopFadeIn");
+    }
+
+    function slide9() {
+        applyAnimation("h2n9", "rightToCenter");
+        setTimeout(() => applyAnimation("pn9", "slideUpOpacity"), 2000);
+        setTimeout(() => applyAnimation("page9", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(9), 7000);
+    }
+
+    function slide10() {
+        applyAnimation("h2n10", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("video1");
+            pElement.style.opacity = "1";
+            applyAnimation("video1", "slideFromTopFadeIn");
+
+        applyAnimation("next5", "slideFromTopFadeIn");
+        applyAnimation("prev5", "slideFromTopFadeIn");
+    }
+
+    function slide11() {
+        applyAnimation("h2n11", "slideFromTopFadeIn");
+
+
+            let pElement = document.getElementById("pn11");
+            pElement.style.opacity = "1";
+            applyAnimation("pn11", "slideFromTopFadeIn");
+
+        applyAnimation("classphoto11", "slideFromTopFadeIn");
+        applyAnimation("h3n1", "slideFromTopFadeIn");
+        applyAnimation("ul1", "slideFromTopFadeIn");
+        applyAnimation("next6", "slideFromTopFadeIn");
+        applyAnimation("prev6", "slideFromTopFadeIn");
+    }
+
+    function slide12() {
+        applyAnimation("h2n12", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("video2");
+            pElement.style.opacity = "1";
+            applyAnimation("video2", "slideFromTopFadeIn");
+
+        applyAnimation("next7", "slideFromTopFadeIn");
+        applyAnimation("prev7", "slideFromTopFadeIn");
+    }
+
+    function slide13() {
+        applyAnimation("h2n13", "slideFromTopFadeIn");
+
+
+            let pElement = document.getElementById("pn13");
+            pElement.style.opacity = "1";
+            applyAnimation("pn13", "slideFromTopFadeIn");
+
+        applyAnimation("classphoto13", "slideFromTopFadeIn");
+        applyAnimation("h3n2", "slideFromTopFadeIn");
+        applyAnimation("ul2", "slideFromTopFadeIn");
+        applyAnimation("next8", "slideFromTopFadeIn");
+        applyAnimation("prev8", "slideFromTopFadeIn");
+    }
+
+    function slide14() {
+        applyAnimation("h2n14", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("video3");
+            pElement.style.opacity = "1";
+            applyAnimation("video3", "slideFromTopFadeIn");
+
+        applyAnimation("next9", "slideFromTopFadeIn");
+        applyAnimation("prev9", "slideFromTopFadeIn");
+    }
+
+    function slide15() {
+        applyAnimation("h2n15", "slideFromTopFadeIn");
+
+
+            let pElement = document.getElementById("pn15");
+            pElement.style.opacity = "1";
+            applyAnimation("pn15", "slideFromTopFadeIn");
+
+        applyAnimation("classphoto15", "slideFromTopFadeIn");
+        applyAnimation("h3n3", "slideFromTopFadeIn");
+        applyAnimation("ul3", "slideFromTopFadeIn");
+        applyAnimation("next10", "slideFromTopFadeIn");
+        applyAnimation("prev10", "slideFromTopFadeIn");
+    }
+
+    function slide16() {
+        applyAnimation("h2n16", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("video4");
+            pElement.style.opacity = "1";
+            applyAnimation("video4", "slideFromTopFadeIn");
+
+        applyAnimation("next11", "slideFromTopFadeIn");
+        applyAnimation("prev11", "slideFromTopFadeIn");
+    }
+
+    function slide17() {
+        applyAnimation("h2n17", "slideFromTopFadeIn");
+
+
+            let pElement = document.getElementById("pn17");
+            pElement.style.opacity = "1";
+            applyAnimation("pn17", "slideFromTopFadeIn");
+
+        applyAnimation("classphoto17", "slideFromTopFadeIn");
+        applyAnimation("h3n4", "slideFromTopFadeIn");
+        applyAnimation("ul4", "slideFromTopFadeIn");
+        applyAnimation("next12", "slideFromTopFadeIn");
+        applyAnimation("prev12", "slideFromTopFadeIn");
+    }
+
+    function slide18() {
+        applyAnimation("h2n18", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn18");
+            pElement.style.opacity = "1";
+            applyAnimation("pn18", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page18", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(18), 7000);
+    }
+
+    function slide19() {
+        applyAnimation("h2n19", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn19");
+            pElement.style.opacity = "1";
+            applyAnimation("pn19", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page19", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(19), 7000);
+    }
+
+    function slide20() {
+        applyAnimation("h2n20", "rightToCenter");
+        applyAnimation("feature1", "slideFromTopFadeIn");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn20");
+            pElement.style.opacity = "1";
+            applyAnimation("pn20", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page20", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(20), 13000);
+    }
+
+    function slide21() {
+        applyAnimation("h2n21", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn21");
+            pElement.style.opacity = "1";
+            applyAnimation("pn21", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page21", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(21), 7000);
+    }
+
+    function slide22() {
+        applyAnimation("h2n22", "rightToCenter");
+        applyAnimation("feature2", "slideFromTopFadeIn");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn22");
+            pElement.style.opacity = "1";
+            applyAnimation("pn22", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page22", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(22), 13000);
+    }
+
+    function slide23() {
+        applyAnimation("h2n23", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn23");
+            pElement.style.opacity = "1";
+            applyAnimation("pn23", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page23", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(23), 7000);
+    }
+
+    function slide24() {
+        applyAnimation("h2n24", "rightToCenter");
+        applyAnimation("feature3", "slideFromTopFadeIn");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn24");
+            pElement.style.opacity = "1";
+            applyAnimation("pn24", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page24", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(24), 13000);
+    }
+
+    function slide25() {
+        applyAnimation("h2n25", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn25");
+            pElement.style.opacity = "1";
+            applyAnimation("pn25", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page25", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(25), 7000);
+    }
+
+    function slide26() {
+        applyAnimation("h2n26", "rightToCenter");
+        applyAnimation("feature4", "slideFromTopFadeIn");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn26");
+            pElement.style.opacity = "1";
+            applyAnimation("pn26", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page26", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(26), 13000);
+    }
+
+    function slide27() {
+        applyAnimation("h2n27", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn27");
+            pElement.style.opacity = "1";
+            applyAnimation("pn23", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page27", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(27), 7000);
+    }
+
+    function slide28() {
+        applyAnimation("h2n28", "rightToCenter");
+        applyAnimation("feature5", "slideFromTopFadeIn");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn28");
+            pElement.style.opacity = "1";
+            applyAnimation("pn28", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page28", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(28), 13000);
+    }
+
+
+    function closeOverlay() {
+        document.getElementById('overlay').style.opacity = '0';
+        setTimeout(() => {
+            document.getElementById('overlay').style.display = 'none';
+        }, 500);
+    }
+</script>
+
+
+</body>
+</html>
+
