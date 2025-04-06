@@ -950,7 +950,7 @@
         <div class="page hidden" id="page29">
             <h2 class="big-text" id="h2n29">But before this ends, we have a special guess!</h2>
             <p class="par-text" id="pn29">
-                Most Latina, Masikip, Magaling na teacher... Ms.Cris!
+                Most Latina, Masikip, Soper Magaling na teacher...
             </p>
         </div>
 
@@ -966,10 +966,6 @@
                 allow="autoplay"
                 allowfullscreen>
             </iframe>
-            <div class="actions-btn-pages">
-                <button class="button-overlays disabled" id="prev13"><i class="ri-arrow-left-fill"></i></button>
-                <button class="button-overlays" id="next13" onclick="nextPage(30)"><i class="ri-arrow-right-fill"></i></button>
-            </div>
         </div>
 
         <div class="page hidden" id="page31">
@@ -984,27 +980,20 @@
         <div class="page hidden" id="page32">
             <h2 class="big-text" id="h2n32">Goodbye, Tolentino!</h2>
             <p class="par-text" id="pn32">
-                See you around! God bless you, and good luck on your next chapter in college.
+                See you around, Tolentino! God bless you, and Good luck on the next chapter of you life in college.
             </p>
         </div>
 
         <div class="page hidden" id="page33">
             <h2 class="big-text" id="h2n33">Photo Memories 📸</h2>
-            <div id="pictureGallery" class="photo-album">
+            <div style="opacity: 0;" id="pictureGallery" class="photo-album">
                 <img src="https://i.ibb.co/23897xFD/1-20250320-133336-0000.png" alt="Photo 1" class="album-photo">
                 <img src="https://i.ibb.co/9HYpPwv2/ICT-TOLENTINO-Gold-Gallery-Class-Picture-Competion.png" alt="Photo 2" class="album-photo">
 
             </div>
         </div>
-
-
-
-
-
-
 </div>
     
-
     <footer>ArcherStudio © 2025 <br><span>Created by: Mark Espora<span></footer>
 <script>
 
@@ -1038,7 +1027,7 @@
         const name = document.getElementById("h2n2");
         const greetings = document.getElementById("h2n7");
 
-        // avatar.src = "https://api.dicebear.com/9.x/pixel-art/svg?seed=" + lastName;
+        avatar.src = "https://api.dicebear.com/9.x/pixel-art/svg?seed=" + lastName;
         name.textContent = "Hi " + lastName;
         greetings.textContent = "Dear, " + lastName;
 
@@ -1076,13 +1065,13 @@
     let isMuted = false;
 
     const videoIds = [
-        '78mCWHJF4JU', //akap
-        '6lh-VHYaveM', //bluesky
-        'ekd46d6AYEQ', //huling sayaw
-        'pCyLYqCuQ_M', //burnout
-        'JQbjS0_ZfJ0', //all the stars
-        'lAqUrQzHUcU',  //hero
-        'E5RCG8aLkIc' //backburner
+        '78mCWHJF4JU', //1 akap
+        '6lh-VHYaveM', //2 bluesky
+        'PGFHB1DrTuY', //3 huling sayaw
+        'TQAfXkNTA8o', //4 burnout
+        'JQbjS0_ZfJ0', //5 all the stars
+        'lAqUrQzHUcU', //6 hero
+        'Bl0Gtp5FMd4' //7 You'll Be in My Heart
     ];
 
     // Preload YouTube videos
@@ -1239,6 +1228,16 @@
         currentPageIndicator = targetPage;
     }
 
+    const videoIds = [
+        '78mCWHJF4JU', //1 akap
+        '6lh-VHYaveM', //2 bluesky
+        'PGFHB1DrTuY', //3 huling sayaw
+        'TQAfXkNTA8o', //4 burnout
+        'JQbjS0_ZfJ0', //5 all the stars
+        'lAqUrQzHUcU', //6 hero
+        'Bl0Gtp5FMd4' //7 You'll Be in My Heart
+    ];
+
     function runSlide(page) {
         switch (page) {
             case 1:
@@ -1348,11 +1347,11 @@
                 break;
             case 29:
                 slide29();
+                playYouTubeVideo(2);
                 updateStoryIndicator(17, true, 7);
                 break;
             case 30:
                 slide30();
-                playYouTubeVideo(2);
                 updateStoryIndicator(18, true, 53);
                 break;
             case 31:
@@ -1361,11 +1360,11 @@
                 break;
             case 32:
                 slide32();
+                playYouTubeVideo(3);
                 updateStoryIndicator(20, true, 7);
                 break;
             case 33:
                 slide33();
-                playYouTubeVideo(1);
                 updateStoryIndicator(21, false);
                 break;
         }
@@ -1738,33 +1737,36 @@
     }
 
     function slide31() {
+
+        setTimeout(() => applyAnimation("page30", "centerToLeft"), 0);
+
         // Fade in first line immediately
         setTimeout(() => {
             document.getElementById("h2n311").style.opacity = "1";
             applyAnimation("h2n311", "fadeIn");
-        }, 0);
+        }, 2500);
 
         // Fade in second line after 3s
         setTimeout(() => {
             document.getElementById("h2n312").style.opacity = "1";
             applyAnimation("h2n312", "fadeIn");
-        }, 3000);
+        }, 5000);
 
         // Fade in third line after 6s
         setTimeout(() => {
             document.getElementById("h2n313").style.opacity = "1";
             applyAnimation("h2n313", "fadeIn");
-        }, 6000);
+        }, 7500);
 
         // Slide up the paragraph after 9s
         setTimeout(() => {
             document.getElementById("pn31").style.opacity = "1";
             applyAnimation("pn31", "slideUpOpacity");
-        }, 9000);
+        }, 10000);
 
         // Transition to next page after 12s
-        setTimeout(() => applyAnimation("page31", "centerToLeft"), 12000);
-        setTimeout(() => nextPage(31), 14000);
+        setTimeout(() => applyAnimation("page31", "centerToLeft"), 13000);
+        setTimeout(() => nextPage(31), 15000);
     }
 
 
@@ -1782,6 +1784,8 @@
     }
 
     function slide33() {
+        let pElement = document.getElementById("pictureGallery");
+        pElement.style.opacity = "0";
         applyAnimation("h2n33", "rightToCenter");
 
         setTimeout(() => {
@@ -1811,7 +1815,6 @@
         }
     }
 
-    // New alias function to call externally
     function playVideo6() {
         startGoodbyePlayback();
     }
