@@ -262,7 +262,7 @@
             /* background: rgba(255, 255, 255, 0.1); */
             border-radius: 10px;
             text-align: center;
-            height: 80vh;
+            height: 77vh;
             position: relative;
             top: 50px;
             flex-direction: column;
@@ -307,7 +307,7 @@
 
         .actions {
             width: 100%;
-            top: 0;
+            top: 30px;
             position: fixed;
             display: flex;
             justify-content: space-between;
@@ -407,8 +407,67 @@
         .features{
             width: 150px;
             border-radius: 5px;
-                        margin-bottom: 25px;
+            margin-bottom: 25px;
         }
+
+        .photo-album {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .album-photo {
+            width: 150px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .album-photo:hover {
+            transform: scale(1.05);
+        }
+
+        .story-indicators {
+            display: flex;
+            gap: 4px;
+            justify-content: center;
+            margin-top: 10px;
+            z-index: 999;
+            width: -webkit-fill-available;
+            opacity: 0.4;
+        }
+
+        .indicator {
+            flex: 1;
+            height: 4px;
+            background-color: #ccc;
+            border-radius: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .indicator.fill::after {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            background-color: #6b7f82;
+            animation: fillBar var(--fill-duration, 7s) linear forwards;
+        }
+
+        .indicator.static {
+            background-color: #6b7f82;
+        }
+
+        @keyframes fillBar {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+
         /* Right to Center */
         @keyframes rightToCenter {
             from { transform: translateX(150%); opacity: 1; }
@@ -519,6 +578,10 @@
 
     <!-- Second Step -->
     <div class="overlay" id="overlay">
+        <div class="story-indicators" id="storyIndicators">
+            <!-- These will be generated dynamically via JS -->
+        </div>
+
         <div class="actions">
             <img src="https://i.ibb.co/ymz2k7P7/app-logo.png" alt="Logo" class="logo">
             <button class="mute-btn" onclick="toggleMute()">
@@ -534,14 +597,14 @@
         <div class="page hidden" id="page2">
             <img id="avatar" class="avatar" alt="avatar" />
             <h2 class="big-text" id="h2n2">Hi</h2>
-            <p class="par-text" id="pn2">Your journey isn’t over yet, but let’s take one last look back.</p>
+            <p class="par-text" id="pn2">We prepared something special just for you! Compilations of our memories.</p>
         </div>
 
 
         <div class="page hidden" id="page3">
             <h2 class="big-text" id="h2n3">Letters for you ❤</h2>
             <p class="par-text" id="pn3">
-                Click the button to open a special message in a bottle just for you!
+                Click the button to read the messages in the bottle, locked just for you!
             </p>
 
             <button class="button-overlays" id="unlock" onclick="nextPage(3)"><i class="ri-lock-fill"></i></button>
@@ -550,7 +613,7 @@
         <div class="page hidden Letters" id="page4">
             <h2 class="big-text" id="h2n4">Dear Tolentino,</h2>
             <p class="par-text" id="pn4">
-                <b>OK, CLASS—BEFORE WE START, ito ang RULES::</b>
+                <b>OK, CLASS—BEFORE WE START, ito ang RULES:</b>
 
                 NO.1. I want you to show your BEST right away, and don’t expect to get a high score easily.
                 NO.2. When I enter the room, I want all the chairs aligned, and you should already be standing.
@@ -591,7 +654,7 @@
         <div class="page hidden" id="page6">
             <h2 class="big-text" id="h2n6">Wait, There's More?!</h2>
             <p class="par-text" id="pn6">
-                This is from your Class Representative.
+                This letter is from your Class Representative.
             </p>
         </div>
 
@@ -884,7 +947,55 @@
             </p>
         </div>
 
+        <div class="page hidden" id="page29">
+            <h2 class="big-text" id="h2n29">But before this ends, we have a special guess!</h2>
+            <p class="par-text" id="pn29">
+                Most Latina, Masikip, Magaling na teacher... Ms.Cris!
+            </p>
+        </div>
 
+        <div class="page hidden Letters" id="page30">
+            <h2 class="big-text" id="h2n30">A Special Message for Tolentino</h2>
+            <iframe 
+                id="video6"
+                width="360"
+                height="640"
+                src="https://www.youtube.com/embed/e3Xv7JpWT6w?enablejsapi=1&controls=1&rel=0&modestbranding=1"
+                title="YouTube video player"
+                frameborder="0"
+                allow="autoplay"
+                allowfullscreen>
+            </iframe>
+            <div class="actions-btn-pages">
+                <button class="button-overlays disabled" id="prev13"><i class="ri-arrow-left-fill"></i></button>
+                <button class="button-overlays" id="next13" onclick="nextPage(30)"><i class="ri-arrow-right-fill"></i></button>
+            </div>
+        </div>
+
+        <div class="page hidden" id="page31">
+            <h2 class="big-text" id="h2n311" style="opacity: 0;">"Do it tired,</h2>
+            <h2 class="big-text" id="h2n312" style="opacity: 0;">Do it uncomfortable,</h2>
+            <h2 class="big-text" id="h2n313" style="opacity: 0;">Do it scared"</h2>
+            <p class="par-text" id="pn31" style="opacity: 0;">
+                — Ms. Cris :3
+            </p>
+        </div>
+
+        <div class="page hidden" id="page32">
+            <h2 class="big-text" id="h2n32">Goodbye, Tolentino!</h2>
+            <p class="par-text" id="pn32">
+                See you around! God bless you, and good luck on your next chapter in college.
+            </p>
+        </div>
+
+        <div class="page hidden" id="page33">
+            <h2 class="big-text" id="h2n33">Photo Memories 📸</h2>
+            <div id="pictureGallery" class="photo-album">
+                <img src="https://i.ibb.co/23897xFD/1-20250320-133336-0000.png" alt="Photo 1" class="album-photo">
+                <img src="https://i.ibb.co/9HYpPwv2/ICT-TOLENTINO-Gold-Gallery-Class-Picture-Competion.png" alt="Photo 2" class="album-photo">
+
+            </div>
+        </div>
 
 
 
@@ -902,11 +1013,9 @@
     document.addEventListener("DOMContentLoaded", function () {
         const form = document.getElementById("graduationForm");
         const submitButton = form.querySelector("button");
-
+        createIndicators();
         form.addEventListener("submit", function (event) {
             event.preventDefault();
-
-            // playYouTubeVideoWithSound("6lh-VHYaveM");
 
             let lastName = document.getElementById("lastNameInput").value.trim();
             if (lastName) {
@@ -1094,21 +1203,60 @@
         }
     }
 
+    const totalPages = 21;
+    let currentPageIndicator = 0;
+
+    function createIndicators() {
+        const container = document.getElementById('storyIndicators');
+        container.innerHTML = '';
+        for (let i = 0; i < totalPages; i++) {
+            const bar = document.createElement('div');
+            bar.classList.add('indicator');
+            bar.id = `indicator-${i + 1}`;
+            container.appendChild(bar);
+        }
+    }
+
+    function updateStoryIndicator(targetPage, animated = false, duration = 7) {
+        for (let i = 0; i < totalPages; i++) {
+            const indicator = document.getElementById(`indicator-${i + 1}`);
+            if (!indicator) continue;
+
+            indicator.className = 'indicator'; // reset classes
+
+            if (i < targetPage - 1) {
+                indicator.classList.add('static');
+            } else if (i === targetPage - 1) {
+                if (animated) {
+                    indicator.classList.add('fill');
+                    // Dynamically set the animation duration
+                    indicator.style.setProperty('--fill-duration', `${duration}s`);
+                } else {
+                    indicator.classList.add('static');
+                }
+            }
+        }
+        currentPageIndicator = targetPage;
+    }
+
     function runSlide(page) {
         switch (page) {
             case 1:
                 slide1();
                 playYouTubeVideo(1);
+                updateStoryIndicator(1, true, 14);
                 break;
             case 2:
                 slide2();
                 break;
             case 3:
                 slide3();
+                updateStoryIndicator(2, false);
                 break;
             case 4:
                 slide4();
                 playYouTubeVideo(6);
+                updateStoryIndicator(3, false);
                 break;
             case 5:
                 slide5();
@@ -1116,76 +1264,110 @@
             case 6:
                 slide6();
                 playYouTubeVideo(7);
+                updateStoryIndicator(4, true, 7);
                 break;
             case 7:
                 slide7();
+                updateStoryIndicator(5, false);
                 break;
             case 8:
                 slide8();
                 break;
             case 9:
                 slide9();
-                playYouTubeVideo(3);
+                playYouTubeVideo(4);
+                updateStoryIndicator(6, true);
                 break;
             case 10:
                 slide10();
+                updateStoryIndicator(7, false);
                 break;
             case 11:
                 slide11();
                 break;
             case 12:
                 slide12();
+                updateStoryIndicator(8, false);
                 break;
             case 13:
                 slide13();
                 break;
             case 14:
                 slide14();
+                updateStoryIndicator(9, false);
                 break;
             case 15:
                 slide15();
                 break;
             case 16:
                 slide16();
+                updateStoryIndicator(10, false);
                 break;
             case 17:
                 slide17();
                 break;
             case 18:
                 slide18();
-                playYouTubeVideo(6);
+                playYouTubeVideo(5);
+                updateStoryIndicator(11, true, 7);
                 break;
             case 19:
                 slide19();
+                updateStoryIndicator(12, true, 14);
                 break;
             case 20:
                 slide20();
                 break;
             case 21:
                 slide21();
+                updateStoryIndicator(13, true, 14);
                 break;
             case 22:
                 slide22();
                 break;
             case 23:
                 slide23();
+                updateStoryIndicator(14, true, 14);
                 break;
             case 24:
                 slide24();
                 break;
             case 25:
                 slide25();
+                updateStoryIndicator(15, true, 14);
                 break;
             case 26:
                 slide26();
                 break;
             case 27:
                 slide27();
+                updateStoryIndicator(16, true, 14);
                 break;
             case 28:
                 slide28();
                 break;
-
+            case 29:
+                slide29();
+                updateStoryIndicator(17, true, 7);
+                break;
+            case 30:
+                slide30();
+                playYouTubeVideo(2);
+                updateStoryIndicator(18, true, 53);
+                break;
+            case 31:
+                slide31();
+                updateStoryIndicator(19, true, 14);
+                break;
+            case 32:
+                slide32();
+                updateStoryIndicator(20, true, 7);
+                break;
+            case 33:
+                slide33();
+                playYouTubeVideo(1);
+                updateStoryIndicator(21, false);
+                break;
         }
     }
 
@@ -1419,7 +1601,7 @@
         }, 2000);
 
         setTimeout(() => applyAnimation("page20", "centerToLeft"), 5000);
-        setTimeout(() => nextPage(20), 13000);
+        setTimeout(() => nextPage(20), 7000);
     }
 
     function slide21() {
@@ -1446,7 +1628,7 @@
         }, 2000);
 
         setTimeout(() => applyAnimation("page22", "centerToLeft"), 5000);
-        setTimeout(() => nextPage(22), 13000);
+        setTimeout(() => nextPage(22), 7000);
     }
 
     function slide23() {
@@ -1473,7 +1655,7 @@
         }, 2000);
 
         setTimeout(() => applyAnimation("page24", "centerToLeft"), 5000);
-        setTimeout(() => nextPage(24), 13000);
+        setTimeout(() => nextPage(24), 7000);
     }
 
     function slide25() {
@@ -1500,7 +1682,7 @@
         }, 2000);
 
         setTimeout(() => applyAnimation("page26", "centerToLeft"), 5000);
-        setTimeout(() => nextPage(26), 13000);
+        setTimeout(() => nextPage(26), 7000);
     }
 
     function slide27() {
@@ -1509,7 +1691,7 @@
         setTimeout(() => {
             let pElement = document.getElementById("pn27");
             pElement.style.opacity = "1";
-            applyAnimation("pn23", "slideUpOpacity");
+            applyAnimation("pn27", "slideUpOpacity");
         }, 2000);
 
         setTimeout(() => applyAnimation("page27", "centerToLeft"), 5000);
@@ -1527,9 +1709,132 @@
         }, 2000);
 
         setTimeout(() => applyAnimation("page28", "centerToLeft"), 5000);
-        setTimeout(() => nextPage(28), 13000);
+        setTimeout(() => nextPage(28), 7000);
     }
 
+    function slide29() {
+        applyAnimation("h2n29", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn29");
+            pElement.style.opacity = "1";
+            applyAnimation("pn29", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page29", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(29), 7000);
+    }
+
+    function slide30() {
+        applyAnimation("h2n30", "slideFromTopFadeIn");
+
+            let pElement = document.getElementById("video6");
+            pElement.style.opacity = "1";
+            applyAnimation("video6", "slideFromTopFadeIn");
+            playVideo6();
+
+        applyAnimation("next13", "slideFromTopFadeIn");
+        applyAnimation("prev13", "slideFromTopFadeIn");
+    }
+
+    function slide31() {
+        // Fade in first line immediately
+        setTimeout(() => {
+            document.getElementById("h2n311").style.opacity = "1";
+            applyAnimation("h2n311", "fadeIn");
+        }, 0);
+
+        // Fade in second line after 3s
+        setTimeout(() => {
+            document.getElementById("h2n312").style.opacity = "1";
+            applyAnimation("h2n312", "fadeIn");
+        }, 3000);
+
+        // Fade in third line after 6s
+        setTimeout(() => {
+            document.getElementById("h2n313").style.opacity = "1";
+            applyAnimation("h2n313", "fadeIn");
+        }, 6000);
+
+        // Slide up the paragraph after 9s
+        setTimeout(() => {
+            document.getElementById("pn31").style.opacity = "1";
+            applyAnimation("pn31", "slideUpOpacity");
+        }, 9000);
+
+        // Transition to next page after 12s
+        setTimeout(() => applyAnimation("page31", "centerToLeft"), 12000);
+        setTimeout(() => nextPage(31), 14000);
+    }
+
+
+    function slide32() {
+        applyAnimation("h2n32", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pn32");
+            pElement.style.opacity = "1";
+            applyAnimation("pn32", "slideUpOpacity");
+        }, 2000);
+
+        setTimeout(() => applyAnimation("page32", "centerToLeft"), 5000);
+        setTimeout(() => nextPage(32), 7000);
+    }
+
+    function slide33() {
+        applyAnimation("h2n33", "rightToCenter");
+
+        setTimeout(() => {
+            let pElement = document.getElementById("pictureGallery");
+            pElement.style.opacity = "1";
+            applyAnimation("pictureGallery", "slideUpOpacity");
+        }, 2000);
+    }
+
+    
+
+    // goodbye message
+
+    let goodbyePlayer;
+
+    function onYouTubeIframeAPIReady() {
+        goodbyePlayer = new YT.Player('video6', {
+            events: {
+                'onStateChange': handleGoodbyeVideoState
+            }
+        });
+    }
+
+    function startGoodbyePlayback() {
+        if (goodbyePlayer) {
+            goodbyePlayer.playVideo();
+        }
+    }
+
+    // New alias function to call externally
+    function playVideo6() {
+        startGoodbyePlayback();
+    }
+
+    function handleGoodbyeVideoState(event) {
+        if (event.data === YT.PlayerState.ENDED) {
+            onGoodbyeVideoEnd();
+        }
+    }
+
+    function onGoodbyeVideoEnd() {
+        console.log("Goodbye video ended. Executing next action...");
+        proceedAfterGoodbye();
+    }
+
+    function proceedAfterGoodbye() {
+        nextPage(30);
+    }
+
+
+    const goodbyeScript = document.createElement('script');
+    goodbyeScript.src = "https://www.youtube.com/iframe_api";
+    document.body.appendChild(goodbyeScript);
 
     function closeOverlay() {
         document.getElementById('overlay').style.opacity = '0';
@@ -1537,9 +1842,9 @@
             document.getElementById('overlay').style.display = 'none';
         }, 500);
     }
+
 </script>
 
 
 </body>
 </html>
-
