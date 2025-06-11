@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>ArcherStudio | Confession</title>
+    <link rel="icon" href="https://i.ibb.co/ymz2k7P7/app-logo.png" type="image/png" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Caveat:wght@400..700&family=Meow+Script&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:wght@400;500;600;700&family=Quicksand:wght@300..700&family=Sacramento&display=swap');
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: "Caveat", cursive;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background: black;
+            text-align: center;
+            padding: 0 35px;
+            overflow: hidden;
+        }
+
+        .bg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: url('https://i.ibb.co/8L6ZddCz/Untitled-design.png') no-repeat center top;
+            background-size: cover;
+            filter: grayscale(80%) blur(2px);
+            z-index: -2;
+        }
+
+        .gradient-overlay {
+            position: absolute;
+            bottom: 0; left: 0;
+            width: 100%; height: 50%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            z-index: -1;
+        }
+
+        .stage {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 3;
+            pointer-events: none;
+        }
+
+        .curtain {
+            position: absolute;
+            top: 0; width: 50%; height: 100%;
+            background: url('https://i.pinimg.com/originals/67/03/1c/67031c23c4c06d8a58b4d75e61cba78a.jpg');
+            background-size: cover;
+            background-position: center;
+            transition: transform 1.5s ease-in-out;
+        }
+
+        .curtain.left { left: 0; border-right: 5px solid black; }
+        .curtain.right { right: 0; background-position: right; border-left: 5px solid black; }
+
+        .stage.open .curtain.left  { transform: translateX(-100%); }
+        .stage.open .curtain.right { transform: translateX(100%); }
+
+        .overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .welcome-message {
+            z-index: 999;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 10vh;
+        }
+
+        .actions {
+            width: 100%;
+            top: 30px;
+            position: fixed;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+        }
+
+        .big-text {
+            margin-bottom: 5px;
+            text-transform: capitalize;
+            font-size: 40px;
+        }
+
+        .par-text {
+            font-size: small;
+            color: #e5e5e5;
+            word-break: keep-all;
+            opacity: 0;
+            display: none;
+            font-size: 20px;
+        }
+
+        .mute-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: white;
+        }
+
+        .mute-btn i {
+            transition: color 0.3s ease;
+        }
+
+        .mute-btn:hover i {
+            color: #ddd;
+        }
+
+/* Animations */
+
+.fadeIn {
+    animation: fadeIn 1.5s forwards;
+}
+.fadeOut {
+    animation: fadeOut 1.5s forwards;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+.start-gate {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+    flex-direction: column;
+    padding: 20px;
+    text-align: center;
+}
+
+.gate-content {
+    max-width: 600px;
+    animation: fadeIn 1.5s ease-out;
+}
+
+.start-gate h2 {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+
+.start-gate p {
+    font-size: 1rem;
+    margin-bottom: 20px;
+    color: #ccc;
+}
+
+.start-gate button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.start-gate button:hover {
+    background-color: #ddd;
+}
+
+</style>
+</head>
+<body>
+    <div class="start-gate" id="startGate">
+        <div class="gate-content">
+            <h2>This is just for memories</h2>
+            <p>Some words may be outdated, but the feelings were once real.</p>
+            <button onclick="startExperience()">Enter</button>
+        </div>
+    </div>
+
+    <div class="bg"></div>
+    <div class="gradient-overlay"></div>
+
+    <div class="stage" id="stage">
+        <div class="curtain left"></div>
+        <div class="curtain right"></div>
+    </div>
+
+    <div class="welcome-message">
+        <h2 class="big-text" id="h2n1">ArcherStudio</h2>
+        <p class="par-text" id="pn1">Project Confession</p>
+    </div>
+
+    <div class="overlay" id="overlay">
+        <div class="actions">
+            <img src="https://i.ibb.co/ymz2k7P7/app-logo.png" alt="Logo" class="logo">
+            <button class="mute-btn" onclick="toggleMute()">
+                <i id="muteIcon" class="ri-volume-up-fill"></i>
+            </button>
+
+        </div>
+
+        <iframe id="confessionFrame" style="width:100%; height:100vh; border:none;"></iframe>
+
+        <div style="display: none;">
+            <div id="ytplayer"></div>
+        </div>
+
+    </div>
+
+    <script>
+        const stage = document.getElementById("stage");
+        const h2 = document.getElementById("h2n1");
+        const p = document.getElementById("pn1");
+        const iframe = document.getElementById("confessionFrame");
+
+        const scenes = [
+            { h: "ArcherStudio", p: "Project Confession" },
+            { h: "Hello There!", p: "It's been a month since SHS graduation..." },
+            { h: "How’s Life?", p: "We hope you're doing well wherever you are now." },
+            { h: "We Have a Surprise!", p: "Let’s unlock the letters from your special someone we kept for you to open!" },
+            { h: "Ready?", p: "This might hit you with a wave of nostalgia." },
+            { h: "But Wait...", p: "These letters are just memories now." },
+            { h: "Truth is...", p: "Some confessions may no longer hold meaning." },
+            { h: "Time Passed", p: "Many of them were written last November 2024..." },
+            { h: "And Now?", p: "It's June 2025 — some already have boyfriends or girlfriends." },
+            { h: "Still...", p: "These words once held real emotion, even if just for a moment." },
+            { h: "Sorry for the delay…", p: "Just too busy lol" },
+            { h: "Alright!", p: "Here — enjoy reading what could’ve been." }
+        ];
+
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        function reset() {
+            h2.style.display = "none";
+            h2.style.opacity = 0;
+            h2.innerText = "";
+
+            p.style.display = "none";
+            p.style.opacity = 0;
+            p.innerText = "";
+        }
+
+        function fadeIn(el) {
+            el.style.display = "block";
+            el.style.animation = "fadeIn 1.5s forwards";
+        }
+
+        function fadeOut(el) {
+            el.style.animation = "fadeOut 1.5s forwards";
+            setTimeout(() => {
+                el.style.display = "none";
+                el.style.opacity = 0;
+            }, 1500);
+        }
+
+        function runSequence(index = 0) {
+            if (index >= scenes.length) {
+                setTimeout(() => stage.classList.add("open"), 1000);
+                return;
+            }
+
+            const scene = scenes[index];
+            reset();
+
+            if (scene.h) h2.innerText = scene.h;
+            if (scene.p) p.innerText = scene.p;
+
+            let delay = 0;
+
+            if (scene.h) {
+                setTimeout(() => fadeIn(h2), delay);
+                delay += 1500;
+            }
+
+            if (scene.p) {
+                setTimeout(() => fadeIn(p), delay);
+                delay += 1500;
+            }
+
+            delay += 4000;
+
+            if (scene.h) setTimeout(() => fadeOut(h2), delay);
+            if (scene.p) setTimeout(() => fadeOut(p), delay);
+            delay += 1500;
+
+            setTimeout(() => runSequence(index + 1), delay + 1000);
+        }
+
+
+        function loadYouTubePlayer(ytid, muted = true) {
+            if (!window.ytApiLoaded) {
+                const tag = document.createElement("script");
+                tag.src = "https://www.youtube.com/iframe_api";
+                document.body.appendChild(tag);
+                window.ytApiLoaded = true;
+            }
+
+            window.onYouTubeIframeAPIReady = function () {
+                window.player = new YT.Player("ytplayer", {
+                    height: "0",
+                    width: "0",
+                    videoId: ytid,
+                    playerVars: {
+                        autoplay: 1,
+                        loop: 1,
+                        playlist: ytid,
+                        controls: 0,
+                        mute: muted ? 1 : 0,
+                    },
+                    events: {
+                        onReady: (event) => {
+                            if (!muted) {
+                                event.target.unMute();
+                                event.target.setVolume(100);
+                            }
+                            event.target.playVideo();
+                        }
+                    }
+                });
+            };
+        }
+
+
+        function toggleMute() {
+            if (!window.player) return;
+            const icon = document.getElementById("muteIcon");
+
+            if (player.isMuted()) {
+                player.unMute();
+                icon.classList.remove("ri-volume-up-fill");
+                icon.classList.add("ri-volume-mute-fill");
+            } else {
+                player.mute();
+                icon.classList.remove("ri-volume-mute-fill");
+                icon.classList.add("ri-volume-up-fill");
+            }
+        }
+
+        function startExperience() {
+            const receiver = getQueryParam("ref");
+            const ytId = getQueryParam("ytid");
+
+            document.getElementById("startGate").style.display = "none";
+
+            if (!receiver) {
+                h2.innerText = "Access Denied";
+                p.innerText = "Invalid Parameter, Please contact the developer";
+                fadeIn(h2);
+                fadeIn(p);
+                return;
+            }
+
+            iframe.src = `https://script.google.com/macros/s/AKfycbzyTU52IEGvpahj3dZiZWe9haijlBhx0GprIpiO6yJyDtRH2M_B8EWuVdfqwtIX0eW8/exec?receiver=${receiver}`;
+
+            if (ytId) { loadYouTubePlayer(ytId, false); }
+
+            runSequence(0);
+        }
+
+</script>
+
+</body>
+</html>
