@@ -90,12 +90,15 @@
 
         .actions {
             width: 100%;
-            top: 30px;
             position: fixed;
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 10px 20px;
+            background: rgba(0, 0, 0, 0.4); /* semi-transparent background */
+            backdrop-filter: blur(10px);     /* applies the blur effect */
+            -webkit-backdrop-filter: blur(10px); /* for Safari support */
+            top: 0;
         }
 
         .logo {
@@ -164,6 +167,7 @@
     flex-direction: column;
     padding: 20px;
     text-align: center;
+
 }
 
 .gate-content {
@@ -197,6 +201,22 @@
     background-color: #ddd;
 }
 
+footer {
+    width: 100%;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    bottom: 30px;
+    position: fixed;
+    z-index: 100;
+    opacity: .3;
+}
+span {
+    font-size: 11px;
+    font-weight: normal;
+    color: #a5a5a5;
+}
+
 </style>
 </head>
 <body>
@@ -219,6 +239,20 @@
     <div class="welcome-message">
         <h2 class="big-text" id="h2n1">ArcherStudio</h2>
         <p class="par-text" id="pn1">Project Confession</p>
+        <button id="skipBtn" onclick="skipSequence()" style="
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        background: rgba(255, 255, 255, 0.7);
+        border: none;
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 1rem;
+        cursor: pointer;
+        display: none;
+        ">Skip</button>
+
     </div>
 
     <div class="overlay" id="overlay">
@@ -230,7 +264,7 @@
 
         </div>
 
-        <iframe id="confessionFrame" style="width:100%; height:100vh; border:none;"></iframe>
+        <iframe id="confessionFrame" style="width:100%; height:100vh; border:none; padding-top: 3rem;"></iframe>
 
         <div style="display: none;">
             <div id="ytplayer"></div>
@@ -238,159 +272,229 @@
 
     </div>
 
-    <script>
-        const stage = document.getElementById("stage");
-        const h2 = document.getElementById("h2n1");
-        const p = document.getElementById("pn1");
-        const iframe = document.getElementById("confessionFrame");
+    <footer>ArcherStudio © 2025 <br><span>Created by: Mark Espora<span></footer>
 
-        const scenes = [
-            { h: "ArcherStudio", p: "Project Confession" },
-            { h: "Hello There!", p: "It's been a month since SHS graduation..." },
-            { h: "How’s Life?", p: "We hope you're doing well wherever you are now." },
-            { h: "We Have a Surprise!", p: "Let’s unlock the letters from your special someone we kept for you to open!" },
-            { h: "Ready?", p: "This might hit you with a wave of nostalgia." },
-            { h: "But Wait...", p: "These letters are just memories now." },
-            { h: "Truth is...", p: "Some confessions may no longer hold meaning." },
-            { h: "Time Passed", p: "Many of them were written last November 2024..." },
-            { h: "And Now?", p: "It's June 2025 — some already have boyfriends or girlfriends." },
-            { h: "Still...", p: "These words once held real emotion, even if just for a moment." },
-            { h: "Alright!", p: "Here — enjoy reading what could’ve been." }
-        ];
-
-        function getQueryParam(param) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(param);
-        }
-
-        function reset() {
-            h2.style.display = "none";
-            h2.style.opacity = 0;
-            h2.innerText = "";
-
-            p.style.display = "none";
-            p.style.opacity = 0;
-            p.innerText = "";
-        }
-
-        function fadeIn(el) {
-            el.style.display = "block";
-            el.style.animation = "fadeIn 1.5s forwards";
-        }
-
-        function fadeOut(el) {
-            el.style.animation = "fadeOut 1.5s forwards";
-            setTimeout(() => {
-                el.style.display = "none";
-                el.style.opacity = 0;
-            }, 1500);
-        }
-
-        function runSequence(index = 0) {
-            if (index >= scenes.length) {
-                setTimeout(() => stage.classList.add("open"), 1000);
-                return;
-            }
-
-            const scene = scenes[index];
-            reset();
-
-            if (scene.h) h2.innerText = scene.h;
-            if (scene.p) p.innerText = scene.p;
-
-            let delay = 0;
-
-            if (scene.h) {
-                setTimeout(() => fadeIn(h2), delay);
-                delay += 1500;
-            }
-
-            if (scene.p) {
-                setTimeout(() => fadeIn(p), delay);
-                delay += 1500;
-            }
-
-            delay += 4000;
-
-            if (scene.h) setTimeout(() => fadeOut(h2), delay);
-            if (scene.p) setTimeout(() => fadeOut(p), delay);
-            delay += 1500;
-
-            setTimeout(() => runSequence(index + 1), delay + 1000);
-        }
+        <script>
+            const stage = document.getElementById("stage");
+            const h2 = document.getElementById("h2n1");
+            const p = document.getElementById("pn1");
+            const iframe = document.getElementById("confessionFrame");
+            let skipTriggered = false;
 
 
-        function loadYouTubePlayer(ytid, muted = true) {
-            if (!window.ytApiLoaded) {
-                const tag = document.createElement("script");
-                tag.src = "https://www.youtube.com/iframe_api";
-                document.body.appendChild(tag);
-                window.ytApiLoaded = true;
-            }
+            const scenes = [
+                { h: "ArcherStudio", p: "Project Confession" },
+                { h: "Hello There!", p: "It's been a month since SHS graduation..." },
+                { h: "How’s Life?", p: "We hope you're doing well wherever you are now." },
+                { h: "We Have a Surprise!", p: "Let’s unlock the letters from your special someone we kept for you to open!" },
+                { h: "Ready?", p: "This might hit you with a wave of nostalgia." },
+                { h: "But Wait...", p: "These letters are just memories now." },
+                { h: "Still...", p: "These words once held real emotion, even if just for a moment." },
+                { h: "Alright!", p: "Here — enjoy reading what could’ve been." }
+            ];
 
-            window.onYouTubeIframeAPIReady = function () {
-                window.player = new YT.Player("ytplayer", {
-                    height: "0",
-                    width: "0",
-                    videoId: ytid,
-                    playerVars: {
-                        autoplay: 1,
-                        loop: 1,
-                        playlist: ytid,
-                        controls: 0,
-                        mute: muted ? 1 : 0,
-                    },
-                    events: {
-                        onReady: (event) => {
-                            if (!muted) {
-                                event.target.unMute();
-                                event.target.setVolume(100);
-                            }
-                            event.target.playVideo();
-                        }
-                    }
-                });
+            const personalizedScenes = {
+                "returnee": [
+                    { h: "ArcherStudio", p: "Project Confession" },
+                    { h: "Welcome Back!", p: "Seems like someone wrote another message for you!" },
+                    { h: "Did you expect more?", p: "Some stories don't end in one letter." },
+                    { h: "This One's Different.", p: "Maybe deeper. Maybe lighter. But it's for you — again." },
+                    { h: "A Sequel?", p: "Maybe. Or maybe it's just the truth they couldn’t say last time." },
+                    { h: "No More Waiting", p: "Let’s read what was written… again." }
+                ],
+
+                "firsttime": [
+                    { h: "ArcherStudio", p: "Project Confession" },
+                    { h: "Hey there!", p: "This is something special meant just for you." },
+                    { h: "Behind the Scenes", p: "A letter was written — just for this moment." },
+                    { h: "Hidden Feelings", p: "Maybe it’s from a friend. Maybe it’s more than that." },
+                    { h: "Let’s Begin", p: "Read slowly. Some words are meant to stay with you." }
+                ],
+                "jose": [
+                    { h: "ArcherStudio", p: "Project Confession" },
+                    { h: "Greetings, Bianca!", p: "We hope you're doing well wherever you are now." },
+                    { h: "The Connections", p: "This entire system was built solely for Tolentino ICT's 2024–2025 confessions." },
+                    { h: "How Brave", p: "They went this far — just to pour their hearts out." },
+                    { h: "We Have a Surprise!", p: "Let’s unlock the letters from your special someone that we’ve kept safe for you." },
+                    { h: "Before Anything Else...", p: "This moment was meant for you — and only you." },
+                    { h: "Time Flies", p: "From August 2024 to June 2025 — so much can change." },
+                    { h: "Some Feelings Don’t Fade...", p: "And the courage it took to confess? That moment was real." },
+                    { h: "You're About to Read...", p: "Not just a letter, but a piece of someone’s heart." },
+                    { h: "Ready, Bianca?", p: "Because what’s next might just surprise you." }
+                ]
+
             };
-        }
 
 
-        function toggleMute() {
-            if (!window.player) return;
-            const icon = document.getElementById("muteIcon");
-
-            if (player.isMuted()) {
-                player.unMute();
-                icon.classList.remove("ri-volume-up-fill");
-                icon.classList.add("ri-volume-mute-fill");
-            } else {
-                player.mute();
-                icon.classList.remove("ri-volume-mute-fill");
-                icon.classList.add("ri-volume-up-fill");
-            }
-        }
-
-        function startExperience() {
-            const receiver = getQueryParam("ref");
-            const ytId = getQueryParam("ytid");
-
-            document.getElementById("startGate").style.display = "none";
-
-            if (!receiver) {
-                h2.innerText = "Access Denied";
-                p.innerText = "Invalid Parameter, Please contact the developer";
-                fadeIn(h2);
-                fadeIn(p);
-                return;
+            function getQueryParam(param) {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get(param);
             }
 
-            iframe.src = `https://script.google.com/macros/s/AKfycbzyTU52IEGvpahj3dZiZWe9haijlBhx0GprIpiO6yJyDtRH2M_B8EWuVdfqwtIX0eW8/exec?receiver=${receiver}`;
+            function reset() {
+                h2.style.display = "none";
+                h2.style.opacity = 0;
+                h2.innerText = "";
 
-            if (ytId) { loadYouTubePlayer(ytId, false); }
+                p.style.display = "none";
+                p.style.opacity = 0;
+                p.innerText = "";
+            }
 
-            runSequence(0);
-        }
+            function fadeIn(el) {
+                el.style.display = "block";
+                el.style.animation = "fadeIn 1.5s forwards";
+            }
 
-</script>
+            function fadeOut(el) {
+                el.style.animation = "fadeOut 1.5s forwards";
+                setTimeout(() => {
+                    el.style.display = "none";
+                    el.style.opacity = 0;
+                }, 1500);
+            }
 
-</body>
-</html>
+            function runSequence(index = 0) {
+                if (skipTriggered) return;
+
+                const skipBtn = document.getElementById("skipBtn");
+
+                if (index === 2) {
+                    skipBtn.style.display = "block";
+                    fadeIn(skipBtn);
+                }
+
+                if (index >= scenes.length) {
+                    fadeOut(skipBtn);
+                    setTimeout(() => stage.classList.add("open"), 1000);
+                    return;
+                }
+
+                const scene = scenes[index];
+                reset();
+
+                if (scene.h) h2.innerText = scene.h;
+                if (scene.p) p.innerText = scene.p;
+
+                let delay = 0;
+
+                if (scene.h) {
+                    setTimeout(() => fadeIn(h2), delay);
+                    delay += 1500;
+                }
+
+                if (scene.p) {
+                    setTimeout(() => fadeIn(p), delay);
+                    delay += 1500;
+                }
+
+                delay += 4000;
+
+                if (scene.h) setTimeout(() => fadeOut(h2), delay);
+                if (scene.p) setTimeout(() => fadeOut(p), delay);
+                delay += 1500;
+
+                setTimeout(() => runSequence(index + 1), delay + 1000);
+            }
+
+
+            function skipSequence() {
+                skipTriggered = true;
+
+                const skipBtn = document.getElementById("skipBtn");
+                fadeOut(skipBtn);
+
+                h2.style.display = "none";
+                p.style.display = "none";
+                stage.classList.add("open");
+            }
+
+
+
+            function loadYouTubePlayer(ytid, muted = true) {
+                if (!window.ytApiLoaded) {
+                    const tag = document.createElement("script");
+                    tag.src = "https://www.youtube.com/iframe_api";
+                    document.body.appendChild(tag);
+                    window.ytApiLoaded = true;
+                }
+
+                window.onYouTubeIframeAPIReady = function () {
+                    window.player = new YT.Player("ytplayer", {
+                        height: "0",
+                        width: "0",
+                        videoId: ytid,
+                        playerVars: {
+                            autoplay: 1,
+                            loop: 1,
+                            playlist: ytid,
+                            controls: 0,
+                            mute: muted ? 1 : 0,
+                        },
+                        events: {
+                            onReady: (event) => {
+                                if (!muted) {
+                                    event.target.unMute();
+                                    event.target.setVolume(100);
+                                }
+                                event.target.playVideo();
+                            }
+                        }
+                    });
+                };
+            }
+
+
+            function toggleMute() {
+                if (!window.player) return;
+                const icon = document.getElementById("muteIcon");
+
+                if (player.isMuted()) {
+                    player.unMute();
+                    icon.classList.remove("ri-volume-up-fill");
+                    icon.classList.add("ri-volume-mute-fill");
+                } else {
+                    player.mute();
+                    icon.classList.remove("ri-volume-mute-fill");
+                    icon.classList.add("ri-volume-up-fill");
+                }
+            }
+
+            function startExperience() {
+                const receiver = getQueryParam("ref");
+                const ytId = getQueryParam("ytid");
+                const personalized = (getQueryParam("p") || "no").toLowerCase();
+                const sceneId = getQueryParam("sid");
+
+                const startGate = document.getElementById("startGate");
+                startGate.classList.add("fadeOut");
+                setTimeout(() => {
+                    startGate.style.display = "none";
+                }, 1500);
+
+                if (!receiver) {
+                    h2.innerText = "Access Denied";
+                    p.innerText = "Invalid Parameter, Please contact the developer";
+                    fadeIn(h2);
+                    fadeIn(p);
+                    return;
+                }
+
+                iframe.src = `https://script.google.com/macros/s/AKfycbzyTU52IEGvpahj3dZiZWe9haijlBhx0GprIpiO6yJyDtRH2M_B8EWuVdfqwtIX0eW8/exec?receiver=${receiver}&personalized=${personalized}`;
+
+                if (ytId) {
+                    loadYouTubePlayer(ytId, false);
+                }
+
+                if (sceneId !== "default" && personalizedScenes[sceneId]) {
+                    scenes.length = 0;
+                    scenes.push(...personalizedScenes[sceneId]);
+                }
+
+                runSequence(0);
+            }
+
+        </script>
+
+    </body>
+    </html>
